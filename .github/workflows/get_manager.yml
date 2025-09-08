@@ -43,7 +43,7 @@ jobs:
 
           # 获取最新成功构建的 ID
           BUILD_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/$REPO/actions/workflows/$FILENAME/runs?status=success" | \
+          "https://api.github.com/repos/$REPO/actions/workflows/$FILENAME/runs?status=success&branch=main" | \
           jq -r '.workflow_runs[0].id')
           echo ＂BUILD_ID=$BUILD_ID＂
           # 获取该构建的 Artifacts
