@@ -80,7 +80,7 @@ jobs:
         run: |
          echo DATE=$(date +%F) >> $GITHUB_ENV
          cd kernel_workspace/kernel_platform
-         curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-test
+         curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-main
          cd ./KernelSU
          KSU_VERSION=$(expr $(/usr/bin/git rev-list --count main) "+" 10700)
          echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
