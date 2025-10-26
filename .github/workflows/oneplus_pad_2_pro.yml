@@ -38,7 +38,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-mark hold gcc make clang
           sudo apt update
           sudo apt install -y python3 git curl ccache zip
 
