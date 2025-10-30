@@ -104,13 +104,12 @@ jobs:
       
         
       - name: Set up susfs
-        if: ${{!inputs.enable_feature_y}}
         run: |
            cd kernel_workspace
            git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-android15-6.6
-           cd susfs4ksu/kernel_patches/
-           patch < $GITHUB_WORKSPACE/pad2pro_fix.patch
-           cd ../..
+           #cd susfs4ksu/kernel_patches/
+           #patch < $GITHUB_WORKSPACE/pad2pro_fix.patch
+           #cd ../..
            git clone https://github.com/SukiSU-Ultra/SukiSU_patch.git
 
            cd kernel_platform        
@@ -126,7 +125,7 @@ jobs:
            cd ./common
 
            #sed -i 's/-32,12 +32,38/-32,11 +32,37/g' 50_add_susfs_in_gki-android15-6.6.patch
-           #sed -i '/#include <trace\/hooks\/fs.h>/d' 50_add_susfs_in_gki-android15-6.6.patch
+           sed -i '/#include <trace\/hooks\/fs.h>/d' 50_add_susfs_in_gki-android15-6.6.patch
 
            patch -p1 < 50_add_susfs_in_gki-android15-6.6.patch || true
            cp ../../SukiSU_patch/hooks/syscall_hooks.patch ./
