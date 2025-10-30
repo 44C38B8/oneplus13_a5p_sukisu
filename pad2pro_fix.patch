@@ -1,0 +1,22 @@
+--- 50_add_susfs_in_gki-android15-6.6.patch	2025-10-30 22:51:32.914793800 +0800
++++ 50_add_susfs_in_gki-android15-6.6_old.patch	2025-10-30 22:44:12.695092700 +0800
+@@ -1348,7 +1348,7 @@
+  	show_fd_locks(m, file, files);
+  	if (seq_has_overflowed(m))
+ diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+-index ad94f3ee623d..abb9d6b4cf23 100644
++index ad94f3ee623d..8f000fc97c3d 100644
+ --- a/fs/proc/task_mmu.c
+ +++ b/fs/proc/task_mmu.c
+ @@ -23,6 +23,9 @@
+@@ -1419,8 +1419,8 @@
+ +	{
+ +		show_map_vma(m, vma);
+ +		SEQ_PUT_DEC("Size:           ", vma->vm_end - vma->vm_start);
+-+		SEQ_PUT_DEC(" kB\nKernelPageSize: ", vma_kernel_pagesize(vma));
+-+		SEQ_PUT_DEC(" kB\nMMUPageSize:    ", vma_mmu_pagesize(vma));
+++		SEQ_PUT_DEC(" kB\nKernelPageSize: ", 4);
+++		SEQ_PUT_DEC(" kB\nMMUPageSize:    ", 4);
+ +		seq_puts(m, " kB\n");
+ +		__show_smap(m, &mss, false);
+ +		seq_printf(m, "THPeligible:    %d\n", 0);
