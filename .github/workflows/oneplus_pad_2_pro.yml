@@ -104,6 +104,7 @@ jobs:
       
         
       - name: Set up susfs
+        if: ${{!inputs.enable_feature_y}}
         run: |
            cd kernel_workspace
            git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-android15-6.6
