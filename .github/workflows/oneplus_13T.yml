@@ -86,7 +86,7 @@ jobs:
          echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
          export KSU_VERSION=$KSU_VERSION
          sed -i "s/DKSU_VERSION=12800/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile 
-         awk -v old='v$1-$(shell cd $(srctree)/$(src); $(GIT_BIN) rev-parse --short=8 HEAD)@$(shell cd $(srctree)/$(src); $(GIT_BIN) rev-parse --abbrev-ref HEAD)' -v new='v$1-$(KSU_VERSION)-酷安@骁龙8至尊版' '
+         awk -v old='v$1-$(shell cd $(KSU_SRC); $(GIT_BIN) rev-parse --short=8 HEAD)@$(shell cd $(KSU_SRC); $(GIT_BIN) rev-parse --abbrev-ref HEAD)' -v new='v$1-$(KSU_VERSION)-酷安@骁龙8至尊版' '
              index($0, old) {
                  $0 = substr($0, 1, index($0, old)-1) new substr($0, index($0, old) + length(old))
              }
