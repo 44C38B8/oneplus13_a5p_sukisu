@@ -13,8 +13,8 @@ on:
         default: false
         type: boolean
   
-  schedule:
-    - cron: '0 22 * * *'
+  #schedule:
+    #- cron: '0 22 * * *'
       
 jobs:
   build:
