@@ -1,5 +1,5 @@
---- "\346\226\260_50_add_susfs_in_gki-android15-6.6.patch"	2025-10-31 21:31:22.333049000 +0800
-+++ "\346\227\247_50_add_susfs_in_gki-android15-6.6.patch"	2025-10-31 21:30:23.315158000 +0800
+--- 50_add_susfs_in_gki-android15-6.6.patch	2025-10-31 21:31:22.333049000 +0800
++++ 50_add_susfs_in_gki-android15-6.6.patch	2025-10-31 21:30:23.315158000 +0800
 @@ -641,7 +641,7 @@
   	if (IS_ERR(new_dentry))
   		goto exit4;
