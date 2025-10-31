@@ -107,9 +107,9 @@ jobs:
         run: |
            cd kernel_workspace
            git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-android15-6.6
-           #cd susfs4ksu/kernel_patches/
-           #patch < $GITHUB_WORKSPACE/pad2pro_fix.patch
-           #cd ../..
+           cd susfs4ksu/kernel_patches/
+           patch < $GITHUB_WORKSPACE/pad2pro_fix.patch
+           cd ../..
            git clone https://github.com/SukiSU-Ultra/SukiSU_patch.git
 
            cd kernel_platform        
