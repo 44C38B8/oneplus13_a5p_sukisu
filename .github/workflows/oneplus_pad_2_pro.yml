@@ -13,8 +13,8 @@ on:
         default: false
         type: boolean
   
-  #schedule:
-    #- cron: '0 22 * * *'
+  schedule:
+    - cron: '0 22 * * *'
       
 jobs:
   build:
@@ -64,13 +64,6 @@ jobs:
           LATEST_TAG=$(git ls-remote --tags https://github.com/44C38B8/oneplus13_a5p_sukisu.git | tail -n1 | sed 's/.*\///')
           if [ $LATEST_TAG -eq $KSU_VERSION ];then exit 1;fi
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            pad2pro_fix.patch
-          sparse-checkout-cone-mode: false
-
       - name: Install repo tool
         run: |
          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/repo
@@ -95,7 +88,7 @@ jobs:
          echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
          export KSU_VERSION=$KSU_VERSION
          sed -i "s/DKSU_VERSION=12800/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
-         awk -v old='v$1-$(shell cd $(srctree)/$(src); $(GIT_BIN) rev-parse --short=8 HEAD)@$(shell cd $(srctree)/$(src); $(GIT_BIN) rev-parse --abbrev-ref HEAD)' -v new='v$1-$(KSU_VERSION)-酷安@骁龙8至尊版' '
+         awk -v old='v$1-$(shell cd $(KSU_SRC); $(GIT_BIN) rev-parse --short=8 HEAD)@$(shell cd $(KSU_SRC); $(GIT_BIN) rev-parse --abbrev-ref HEAD)' -v new='v$1-$(KSU_VERSION)-酷安@骁龙8至尊版' '
              index($0, old) {
                  $0 = substr($0, 1, index($0, old)-1) new substr($0, index($0, old) + length(old))
              }
@@ -107,9 +100,6 @@ jobs:
         run: |
            cd kernel_workspace
            git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-android15-6.6
-           cd susfs4ksu/kernel_patches/
-           patch < $GITHUB_WORKSPACE/pad2pro_fix.patch
-           cd ../..
            git clone https://github.com/SukiSU-Ultra/SukiSU_patch.git
 
            cd kernel_platform        
@@ -245,6 +235,7 @@ jobs:
           echo "CONFIG_KSU_SUSFS_HIDE_KSU_SUSFS_SYMBOLS=y" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG=y" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_KSU_SUSFS_SUS_MAP=n" >> ./common/arch/arm64/configs/gki_defconfig
           
           echo "CONFIG_CRYPTO_LZ4HC=y" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_CRYPTO_LZ4K=y" >> ./common/arch/arm64/configs/gki_defconfig
