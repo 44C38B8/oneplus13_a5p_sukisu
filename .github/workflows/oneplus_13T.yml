@@ -54,7 +54,7 @@ jobs:
           git clone https://github.com/SukiSU-Ultra/SukiSU-Ultra.git SUKI/
           cd SUKI
           KSU_GIT_VERSION=$(git rev-list --count HEAD)
-          KSU_VERSION=$((10000 + KSU_GIT_VERSION + 700))
+          KSU_VERSION=$((40000 + KSU_GIT_VERSION - 2815))
           LATEST_TAG=$(git ls-remote --tags https://github.com/44C38B8/oneplus13_a5p_sukisu.git | tail -n1 | sed 's/.*\///')
           if [ $LATEST_TAG -eq $KSU_VERSION ];then exit 1;fi
           cd ..
@@ -76,7 +76,7 @@ jobs:
       - name: Initialize repo and sync
         run: |
          mkdir kernel_workspace && cd kernel_workspace
-         repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b refs/heads/oneplus/sm8750 -m oneplus_13t.xml --depth=1
+         repo init -u https://github.com/44C38B8/kernel_manifest.git -b refs/heads/oneplus/sm8750 -m oneplus_13t.xml --depth=1
          repo --trace sync -c -j$(nproc --all) --no-tags
          rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
@@ -117,8 +117,8 @@ jobs:
            cd ./common
 
            patch -p1 < 50_add_susfs_in_gki-android15-6.6.patch || true
-           cp ../../SukiSU_patch/hooks/syscall_hooks.patch ./
-           patch -p1 -F 3 < syscall_hooks.patch
+           cp ../../SukiSU_patch/hooks/scope_min_manual_hooks_v1.6.patch ./
+           patch -p1 -F 3 < scope_min_manual_hooks_v1.6.patch
            echo "完成"
       
       - name: Apply HMBird GKI patch
