@@ -12,6 +12,11 @@ on:
         required: false
         default: false
         type: boolean
+      enable_feature_z:
+        description: "不发布release"
+        required: false
+        default: true
+        type: boolean
   
   schedule:
     - cron: '0 22 * * *'
@@ -325,6 +330,7 @@ jobs:
          zip -r ./OnePlus13T_SukiSU_${{ env.KSUVER }}.zip *
 
       - name: Create Release
+        if: ${{!inputs.enable_feature_z}}
         uses: softprops/action-gh-release@v1
         with:
          name: Release ${{ env.DATE }}
