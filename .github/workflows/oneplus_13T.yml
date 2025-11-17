@@ -128,8 +128,8 @@ jobs:
            cd ./common
 
            patch -p1 < 50_add_susfs_in_gki-android15-6.6.patch || true
-           cp ../../SukiSU_patch/hooks/scope_min_manual_hooks_v1.6.patch ./
-           patch -p1 -F 3 < scope_min_manual_hooks_v1.6.patch
+           # cp ../../SukiSU_patch/hooks/scope_min_manual_hooks_v1.6.patch ./
+           # patch -p1 -F 3 < scope_min_manual_hooks_v1.6.patch
            echo "完成"
       
       - name: Apply HMBird GKI patch
@@ -227,7 +227,7 @@ jobs:
 
           # Add VFS configuration settings
           echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> ./common/arch/arm64/configs/gki_defconfig
-          echo "CONFIG_KSU_MANUAL_HOOK=y" >> ./common/arch/arm64/configs/gki_defconfig
+          # echo "CONFIG_KSU_MANUAL_HOOK=y" >> ./common/arch/arm64/configs/gki_defconfig
           
           # Add SUSFS configuration settings
           echo "CONFIG_KSU_SUSFS=y" >> ./common/arch/arm64/configs/gki_defconfig
