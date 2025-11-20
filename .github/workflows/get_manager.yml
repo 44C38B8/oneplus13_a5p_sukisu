@@ -42,7 +42,7 @@ jobs:
           FILENAME="build-manager.yml"
 
           # 获取最新成功构建的 ID
-          BUILD_ID=$(curl -s "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          BUILD_ID=$(curl -s \
           "https://api.github.com/repos/$REPO/actions/workflows/$FILENAME/runs?status=success" | \
           jq -r '.workflow_runs[0].id')
           echo ＂BUILD_ID=$BUILD_ID＂
