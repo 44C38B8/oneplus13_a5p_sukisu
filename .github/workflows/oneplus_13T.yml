@@ -59,7 +59,7 @@ jobs:
           git clone https://github.com/SukiSU-Ultra/SukiSU-Ultra.git SUKI/
           cd SUKI
           KSU_GIT_VERSION=$(git rev-list --count HEAD)
-          KSU_VERSION=$((10000 + KSU_GIT_VERSION + 700))
+          KSU_VERSION=$((37185 + KSU_GIT_VERSION))
           LATEST_TAG=$(git ls-remote --tags https://github.com/44C38B8/oneplus13_a5p_sukisu.git | tail -n1 | sed 's/.*\///')
           if [ $LATEST_TAG -eq $KSU_VERSION ];then exit 1;fi
           cd ..
