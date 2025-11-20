@@ -53,7 +53,7 @@ jobs:
           # 获取 Manager 文件的下载链接
           
           
-          DOWNLOAD_URL=$(echo "$ARTIFACTS" | jq -r '.artifacts[] | select(.name == "manager") | .archive_download_url')
+          DOWNLOAD_URL=$(echo "$ARTIFACTS" | jq -r '.artifacts[] | select(.name | contains("Manager")) | .archive_download_url')
           echo $DOWNLOAD_URL
 
           # 下载 Manager 文件
