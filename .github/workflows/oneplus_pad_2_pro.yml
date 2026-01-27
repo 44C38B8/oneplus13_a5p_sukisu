@@ -331,6 +331,7 @@ jobs:
          name: Release ${{ env.DATE }}
          body: 一加13T、一加平板2Pro SukiSU_${{ env.KSUVER }}
          tag_name: ${{ env.KSUVER }}
+         prerelease: true
          files: ./AnyKernel3/*.zip
         env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
