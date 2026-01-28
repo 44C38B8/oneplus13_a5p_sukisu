@@ -349,9 +349,8 @@ jobs:
          cd ./AnyKernel3/
          zip -r ./OnePlus13T_SukiSU_${{ env.KSUVER }}.zip *
 
-      - name: Create Release
-        if: steps.check.outputs.should_cancel != 'yes'
-        if: ${{!inputs.enable_feature_z}}
+      - name: Create Release 
+        if: ${{!inputs.enable_feature_z && steps.check.outputs.should_cancel != 'yes'}}
         uses: softprops/action-gh-release@v1
         with:
          name: Release ${{ env.DATE }}
