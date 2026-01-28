@@ -30,9 +30,6 @@ jobs:
       CCACHE_HARDLINK: "true"
       CCACHE_DIR: /home/runner/.ccache  
       CCACHE_MAXSIZE: 8G
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    permissions: 
-      actions: write
     steps:
       - name: Maximize build space
         uses: easimon/maximize-build-space@master
@@ -58,6 +55,7 @@ jobs:
 
       - name: Compare Version
         if: ${{!inputs.enable_feature_y}}
+        id: check
         run: |
           git clone https://github.com/SukiSU-Ultra/SukiSU-Ultra.git SUKI/
           cd SUKI
@@ -67,9 +65,15 @@ jobs:
           echo "当前版本：$LATEST_TAG"
           echo "最新版本：$KSU_VERSION"
           if [ $LATEST_TAG -eq $KSU_VERSION ];then
-            exit 0
+            echo "should_cancel=yes" >> $GITHUB_OUTPUT
           fi
           cd ..
+
+      - name: Cancel Current Run
+        if: steps.check.outputs.should_cancel == 'yes'
+        uses: styfle/cancel-workflow-action@0.12.1
+        with:
+          access_token: ${{ github.token }}
 
       - name: Restore ccache
         uses: actions/cache@v3
