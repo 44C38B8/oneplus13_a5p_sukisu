@@ -30,6 +30,7 @@ jobs:
       CCACHE_HARDLINK: "true"
       CCACHE_DIR: /home/runner/.ccache  
       CCACHE_MAXSIZE: 8G
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions: 
       actions: write
     steps:
