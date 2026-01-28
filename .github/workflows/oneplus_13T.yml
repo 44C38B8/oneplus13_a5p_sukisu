@@ -67,8 +67,7 @@ jobs:
           echo "当前版本：$LATEST_TAG"
           echo "最新版本：$KSU_VERSION"
           if [ $LATEST_TAG -eq $KSU_VERSION ];then
-            gh run cancel ${{ github.run_id }}
-            sleep 10
+            exit 0
           fi
           cd ..
 
