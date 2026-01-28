@@ -69,13 +69,8 @@ jobs:
           fi
           cd ..
 
-      - name: Cancel Current Run
-        if: steps.check.outputs.should_cancel == 'yes'
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ github.token }}
-
       - name: Restore ccache
+        if: steps.check.outputs.should_cancel != 'yes'
         uses: actions/cache@v3
         with:
           path: /home/runner/.ccache
@@ -84,12 +79,14 @@ jobs:
             ccache-${{ runner.os }}-
 
       - name: Install repo tool
+        if: steps.check.outputs.should_cancel != 'yes'
         run: |
          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/repo
          chmod a+x ~/repo
          sudo mv ~/repo /usr/local/bin/repo
 
       - name: Initialize repo and sync
+        if: steps.check.outputs.should_cancel != 'yes'
         run: |
          mkdir kernel_workspace && cd kernel_workspace
          repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b refs/heads/oneplus/sm8750 -m oneplus_13t_b.xml --depth=1
@@ -98,6 +95,7 @@ jobs:
          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
             
       - name: Set up SukiSU
+        if: steps.check.outputs.should_cancel != 'yes'
         run: |
          echo DATE=$(date +%F) >> $GITHUB_ENV
          cd kernel_workspace/kernel_platform
@@ -121,6 +119,7 @@ jobs:
          # ' kernel/Makefile > kernel/Makefile.tmp && mv kernel/Makefile.tmp kernel/Makefile
 
       - name: Set up susfs
+        if: steps.check.outputs.should_cancel != 'yes'
         run: |
            cd kernel_workspace
            git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-android15-6.6
@@ -144,6 +143,7 @@ jobs:
            echo "完成"
       
       - name: Apply HMBird GKI patch
+        if: steps.check.outputs.should_cancel != 'yes'
         run: |
          cd kernel_workspace/kernel_platform/common/drivers
          cat << 'EOF' > hmbird_patch.c
@@ -226,12 +226,14 @@ jobs:
 
  
       - name: Apply lz4kd Patches
+        if: steps.check.outputs.should_cancel != 'yes'
         run: |
           cd kernel_workspace/kernel_platform/common
             cp ../../SukiSU_patch/other/zram/zram_patch/6.6/lz4kd.patch ./
             patch -p1 -F 3 < lz4kd.patch || true
            
       - name: Add SUSFS Configuration Settings
+        if: steps.check.outputs.should_cancel != 'yes'
         run: |
           cd kernel_workspace/kernel_platform
           echo "CONFIG_KSU=y" >> ./common/arch/arm64/configs/gki_defconfig
@@ -280,7 +282,7 @@ jobs:
           git add -A && git commit -a -m "BUILD Kernel"
       
       - name: Add KPM Configuration Settings
-        if: ${{inputs.enable_feature_x}}
+        if: ${{inputs.enable_feature_x && steps.check.outputs.should_cancel != 'yes'}}
         run: |
           cd kernel_workspace/kernel_platform
           echo "CONFIG_KPM=y" >> ./common/arch/arm64/configs/gki_defconfig
@@ -291,12 +293,14 @@ jobs:
           git add -A && git commit -a -m "BUILD Kernel"
           
       - name: Add make name
+        if: steps.check.outputs.should_cancel != 'yes'
         run: |
          cd kernel_workspace/kernel_platform
          sed -i 's/${scm_version}//' ./common/scripts/setlocalversion
          sudo sed -i 's/-4k/-android15-8-gd43086512890-abogki423825152-4k/g' ./common/arch/arm64/configs/gki_defconfig
 
       - name: Add sched_ext
+        if: steps.check.outputs.should_cancel != 'yes'
         run: |
          cd kernel_workspace/kernel_platform/
          git clone https://github.com/HanKuCha/sched_ext.git
@@ -305,6 +309,7 @@ jobs:
          cd common/kernel/sched
 
       - name: Build Kernel
+        if: steps.check.outputs.should_cancel != 'yes'
         run: |
           export KBUILD_BUILD_TIMESTAMP="Tue Jun 10 12:12:23 UTC 2025"
           export PATH="$GITHUB_WORKSPACE/kernel_workspace/kernel_platform/prebuilts/clang/host/linux-x86/clang-r510928/bin:$PATH"
@@ -314,6 +319,7 @@ jobs:
           make -j$(nproc --all) LLVM=1 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CC=clang RUSTC=../../prebuilts/rust/linux-x86/1.73.0b/bin/rustc PAHOLE=../../prebuilts/kernel-build-tools/linux-x86/bin/pahole LD=ld.lld  HOSTLD=ld.lld O=out KCFLAGS+=-O2 KCFLAGS_PERF+=-O3 gki_defconfig all
           
       - name: Apply Linux Patch
+        if: steps.check.outputs.should_cancel != 'yes'
         run: |
          cd kernel_workspace/kernel_platform/common/out/arch/arm64/boot
          curl -LO https://github.com/SukiSU-Ultra/SukiSU_KernelPatch_patch/releases/download/0.12.0/patch_linux
@@ -323,6 +329,7 @@ jobs:
          mv oImage Image
          
       - name: Make AnyKernel3
+        if: steps.check.outputs.should_cancel != 'yes'
         run: |
          git clone https://github.com/Kernel-SU/AnyKernel3.git --depth=1      
          rm -rf ./AnyKernel3/.git
@@ -330,17 +337,20 @@ jobs:
          cp kernel_workspace/kernel_platform/common/out/arch/arm64/boot/Image ./AnyKernel3/
 
       - name: Upload AnyKernel3
+        if: steps.check.outputs.should_cancel != 'yes'
         uses: actions/upload-artifact@v4
         with:
          name: SukiSU_${{ env.KSUVER }}_OnePlus_13T
          path: ./AnyKernel3/*
 
       - name: Create AnyKernel3 ZIP
+        if: steps.check.outputs.should_cancel != 'yes'
         run: |
          cd ./AnyKernel3/
          zip -r ./OnePlus13T_SukiSU_${{ env.KSUVER }}.zip *
 
       - name: Create Release
+        if: steps.check.outputs.should_cancel != 'yes'
         if: ${{!inputs.enable_feature_z}}
         uses: softprops/action-gh-release@v1
         with:
