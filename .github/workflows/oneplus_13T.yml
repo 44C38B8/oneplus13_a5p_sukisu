@@ -63,7 +63,12 @@ jobs:
           LATEST_TAG=$(git ls-remote --tags https://github.com/44C38B8/oneplus13_a5p_sukisu.git | tail -n1 | sed 's/.*\///')
           echo "当前版本：$LATEST_TAG"
           echo "最新版本：$KSU_VERSION"
-          if [ $LATEST_TAG -eq $KSU_VERSION ];then exit 1;fi
+          if [ $LATEST_TAG -eq $KSU_VERSION ];then
+            curl -X POST \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/cancel
+          fi
           cd ..
 
       - name: Restore ccache
