@@ -30,6 +30,8 @@ jobs:
       CCACHE_HARDLINK: "true"
       CCACHE_DIR: /home/runner/.ccache  
       CCACHE_MAXSIZE: 8G
+    permissions: 
+      actions: write
     steps:
       - name: Maximize build space
         uses: easimon/maximize-build-space@master
@@ -64,10 +66,8 @@ jobs:
           echo "当前版本：$LATEST_TAG"
           echo "最新版本：$KSU_VERSION"
           if [ $LATEST_TAG -eq $KSU_VERSION ];then
-            curl -X POST \
-              -H "Authorization: Bearer $GH_TOKEN" \
-              -H "Accept: application/vnd.github+json" \
-              https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/cancel
+            gh run cancel ${{ github.run_id }}
+            sleep 10
           fi
           cd ..
 
